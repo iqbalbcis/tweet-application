@@ -1,0 +1,22 @@
+
+This is a spring boot maven project
+=======================================
+1) Need to install Java (minimum version 8)
+
+2) Need to install Maven
+
+3) Please, set the related database properties to application.yaml
+
+4) Please, execute the provided database script
+
+5) Please, start the ActiveMQ server locally using default port
+
+6) To run the application: go in side the project and open it in command promote then put the below command
+
+   mvn spring-boot:run
+   
+7) Need to install NodeJS
+
+8) Please, run angular web application
+
+9) use login credential - admin admin

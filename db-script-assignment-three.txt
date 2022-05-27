@@ -1,0 +1,54 @@
+CREATE DATABASE `tweet_application`;
+
+use `tweet_application`;
+
+DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `tweet`;
+DROP TABLE IF EXISTS `loginstatus`;
+DROP TABLE IF EXISTS `reply`;
+DROP TABLE IF EXISTS `tweetcount`;
+
+
+CREATE TABLE `user` (
+  `userId` int NOT NULL AUTO_INCREMENT,
+  `createDateTime` datetime DEFAULT NULL,
+  `email` varchar(128) NOT NULL,
+  `passWord` varchar(75) NOT NULL,
+  `roles` varchar(20) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  PRIMARY KEY (`userId`),
+  UNIQUE KEY `UK_sb8bbouer5wak8vyiiy4pf2bx` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `tweet` (
+  `tweetId` bigint NOT NULL AUTO_INCREMENT,
+  `createDateTime` datetime DEFAULT NULL,
+  `text` text NOT NULL,
+  `updateDateTime` datetime DEFAULT NULL,
+  `username` varchar(100) NOT NULL,
+  PRIMARY KEY (`tweetId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `reply` (
+  `replyId` bigint NOT NULL AUTO_INCREMENT,
+  `text` text NOT NULL,
+  `tweetId` bigint NOT NULL,
+  `username` varchar(100) NOT NULL,
+  PRIMARY KEY (`replyId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `loginstatus` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `loginStatus` varchar(10) NOT NULL,
+  `timeStamp` datetime DEFAULT NULL,
+  `username` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `tweetcount` (
+  `tweetLkId` bigint NOT NULL AUTO_INCREMENT,
+  `likeCount` int DEFAULT NULL,
+  `tweetId` bigint NOT NULL,
+  `username` varchar(100) NOT NULL,
+  PRIMARY KEY (`tweetLkId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
