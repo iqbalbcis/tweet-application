@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+#logging:
+#  file: D:/Cognizant-Course/Assignment/assignment-2/assignment-exercise-two/logs/info.log
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/tweet_application?autoReconnect=true&useUnicode=yes&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+#    username: root
+#    password: Matlab009cxnakhi123
+
+    url: jdbc:mysql://database-ecs-1.c3hubc60xsd0.eu-west-1.rds.amazonaws.com/tweet_application?autoReconnect=true&useUnicode=yes&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: admin_ecs_1
+    password: Nakhi1234
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: validate
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

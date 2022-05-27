@@ -1,0 +1,16 @@
+
+1) Change in propert file (aunthenticate, referesh path if need)
+2) Have look in constant file if need to change anything
+3) Have a look in swagger config if need to change (like application name, set path)
+
+
+INSERT INTO tweet_application.user (`email`,`password`,`roles`,`username`, `createDateTime`) VALUES ('iqbalbcis@gmail.com','$2a$10$HnV00pzITxWapaYGMAujQuuAaRdHATFehw.ZPTqLWkfExvU4aGLNu','Admin','iqbal', '2021-07-25 00:00:00');
+
+iqbal(N....0.9c.)
+
+post tweet
+================
+{
+  "text": "first tweet"
+}
+===================

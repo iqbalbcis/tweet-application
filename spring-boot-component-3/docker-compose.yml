@@ -1,0 +1,25 @@
+version: '3'
+services:
+  mysql-standalone:
+    image: 'mysql:5.7'
+    container_name: msql-container-three
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=roota
+      - MYSQL_DATABASE=tweet_application
+    ports:
+      - "3307:3306"
+  springboot-docker-container:
+    image: assignment-exercise-three
+    container_name: component-3-container
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-standalone:3306/tweet_application?autoReconnect=true&useUnicode=yes&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "roota"
+    build:
+      context: "./"
+      dockerfile: "Dockerfile"
+    depends_on:
+      - mysql-standalone
