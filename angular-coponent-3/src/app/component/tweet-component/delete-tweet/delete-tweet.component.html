@@ -1,0 +1,18 @@
+<div class="mt-5 card container border rounded p-s5 divwidth">
+  <h5 class="text-center mb-4">Please, enter the tweet Id</h5>
+  <div class="alert alert-success" *ngIf="invalidInput">{{message}}</div>
+  <form [formGroup]="form" (ngSubmit)="deleteDataUsingTweetId()" autocomplete="off">
+
+    <div class="form-group">
+      <input type="text" formControlName="tweetId" placeholder="Tweet Id" class="form-control"
+        [ngClass]="{ 'is-invalid': submitted && f.tweetId.errors }" />
+      <div *ngIf="submitted && f.tweetId.errors" class="invalid-feedback">
+        <div *ngIf="f.tweetId.errors.required">Tweet Id is required</div>
+      </div>
+    </div>
+
+    <div></div>
+    <input type="submit" value="Submit" class="btn btn-info btn-block btn-lg">
+    <p></p>
+  </form>
+</div>

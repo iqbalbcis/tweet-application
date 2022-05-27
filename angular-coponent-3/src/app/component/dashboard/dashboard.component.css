@@ -1,0 +1,23 @@
+.divwidth
+{
+  max-width: 455px;
+  margin: auto;
+}
+button {
+  height: 60px;
+  width: 200px;
+  text-align: center;
+  margin: 3px;
+  font-weight: 500;
+}
+button:hover {
+  background-color: #e7e7e7;
+  color: black;
+}
+
+@media only screen and (max-width: 455px) {
+  /* For mobile phones: */
+  h4{
+    max-width: 350px;
+  }
+}

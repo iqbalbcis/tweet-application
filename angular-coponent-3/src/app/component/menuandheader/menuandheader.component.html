@@ -1,0 +1,24 @@
+<div class="mt-1">
+  <header>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <!-- <div><a href="https://www.huberslaw.co.uk" target="_blank" class="navbar-brand">
+          Law Firm Management Systems</a></div> -->
+
+      <!-- <div><span class="navbar-brand">Law Firm Management Systems</span></div> -->
+      <div><span class="navbar-brand">Tweet Application</span></div>
+
+      <ul class="navbar-nav">
+        <li><a *ngIf="authenticationService.isUserLoggedIn()" routerLink="/dashboard" class="nav-link">Main Board</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav navbar-collapse justify-content-end">
+        <li><a *ngIf="!authenticationService.isUserLoggedIn()" routerLink="/login" class="nav-link">Login</a></li>
+        <li><a *ngIf="authenticationService.isUserLoggedIn()" class="nav-link"><img src="assets/images/user.png"
+              alt="user">{{getUserName()}}</a></li>
+        <li><a *ngIf="authenticationService.isUserLoggedIn()" (click)="logout()" routerLink="/login" class="nav-link">
+            <img src="assets/images/logout.png" alt="logout"> Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+</div>

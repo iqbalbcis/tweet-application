@@ -1,0 +1,26 @@
+<h3 class="mt-2 p-3 text-center bg-success text-white">All Users</h3>
+<div class="mt-1 container table-responsive full-height">
+  <table class="mt-1 table-bordered tableFormatter center oddrowcolor">
+    <thead>
+      <tr>
+          <th>User Name</th>
+          <th>Roles</th>
+          <th>Email</th>
+          <th>Created Date and Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of userList">
+        <td>{{user.username}}</td>
+        <td>{{user.roles}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.createDateTime}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class = "mt-2 text-center">
+  <a routerLink ="/findAllUsers" (click)= "goToTheTop()"> Go to the top</a>
+</div>
+

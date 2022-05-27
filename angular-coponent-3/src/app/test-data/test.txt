@@ -1,0 +1,58 @@
+ hasInstallment: ['',  Validators.required],
+      installmentList: this.formBuilder.array([
+        this.formBuilder.group({
+          ddate: [],
+          amount: [],
+          status: [],
+        })
+      ])
+
+addInstallemntInList()
+  {
+
+    this.paymentInstallData = {
+      fileRefNumber: '123456.20',
+      paidAmount: this.f.amount.value,
+      paymentDate: this.f.ddate.value,
+      active: this.f.status.value
+    }
+
+    this.list.push(this.paymentInstallData);
+    console.log(this.form.controls.installmentList.setValue(this.list));
+
+    for (var i in this.list)
+    {
+      console.log(this.list[i].fileRefNumber+", ");
+      console.log(this.list[i].paidAmount+", ");
+      console.log(this.list[i].paymentDate+", ");
+      console.log(this.list[i].active);
+    }
+  }
+
+export class PaymentOfInstallment {
+    constructor(
+      public paidAmount: number,
+      public paymentDate: Date,
+      public fileRefNumber: string,
+      public active: string
+    ){}
+}
+
+ngOnInit() {
+        this.registerForm = this.formBuilder.group({
+            title: ['', Validators.required],
+            firstName: ['', Validators.required],
+            lastName: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', [Validators.required, Validators.minLength(6)]],
+            confirmPassword: ['', Validators.required],
+            acceptTerms: [false, Validators.requiredTrue]
+        }, {
+            validator: MustMatch('password', 'confirmPassword')
+        });
+        https://jasonwatmore.com/post/2019/06/14/angular-8-reactive-forms-validation-example
+    }
+
+sweet alert - https://www.npmjs.com/package/sweetalert2
+
+how to use cookie: https://www.youtube.com/watch?v=cGFdrVygHM8

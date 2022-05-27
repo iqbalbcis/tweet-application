@@ -1,0 +1,130 @@
+<div class="mt-1 card">
+  <h4 class="card-header text-center">Post New Tweet</h4>
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="postNewTweet()" autocomplete="off">
+
+      <div class="form-group">
+        <textarea rows="10" formControlName="text" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.text.errors }"></textarea>
+        <div *ngIf=" submitted && f.text.errors" class="invalid-feedback">
+          <div *ngIf="f.text.errors.required">Tweet body is required</div>
+        </div>
+      </div>
+
+      <div class="form-group text-center">
+        <button class="btn btn-primary">Add Post</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="osahan-account-page-right shadow-sm bg-white p-4 h-100">
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane  fade  active show" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+          <div class="bg-white card mb-4 order-list shadow-sm">
+            <div *ngFor="let obj of postListArr" class="gold-members p-4" style="border: 1px solid red;">
+              <div class="media">
+                <a>
+                  <img class="mr-4" src="https://bootdey.com/img/Content/avatar/avatar2.png"
+                    alt="Generic placeholder image">
+                </a>
+                <div class="media-body">
+                  <a>
+                    <span class="float-right text-info">{{obj?.createDateTime | date:'MMM d, y, h:mm:ss'}}
+                      <i class="icofont-check-circled text-success"></i></span>
+                  </a>
+                  <h6 class="mb-2">
+                    <a href="#"></a>
+                    <a class="text-black">{{obj?.username}}</a>
+                  </h6>
+                  <p class="text-dark">{{obj?.text}} </p>
+                  <hr>
+                  <div class="float-right">
+                    <button class="btn btn-sm btn-outline-primary" (click)="replyModal(obj)"><i
+                        class="icofont-reply"></i> Reply</button>
+                    <a class="btn btn-sm btn-outline-primary" (click)="editModal(obj)"><i class="icofont-edit"></i>
+                      Edit</a>
+                    <a class="btn btn-sm btn-outline-primary" (click)="updateTweetLike(obj?.tweetId)"><i
+                        class="icofont-like"></i> Like {{obj?.totalLikeCount}}</a>
+                    <a class="btn btn-sm btn-outline-primary" (click)="deleteTweetDetails(obj?.tweetId)"><i
+                        class="icofont-slidshare"></i> Delete </a>
+                  </div>
+                </div>
+              </div>
+
+              <hr>
+              <div *ngIf= "obj?.replyList.length>0">
+              <div class="text-info" style="font-weight: bold;">
+                All Replies
+              </div>
+              <div style="border: 1px solid black; color: aquamarine">
+                <table class="table table-striped">
+                  <tr style="color:black;" *ngFor="let reply of obj?.replyList">
+                    <td style="width: 20%; color: rgb(248, 16, 171); font-weight: initial;">
+                      <img style="height: 20px!important; width: 20px!important"
+                        src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="Generic placeholder image">
+                      {{reply?.username}}
+                    </td>
+                    <td>{{reply?.text}}</td>
+                  </tr>
+                </table>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #tweetEdit>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Update Tweet</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form1" autocomplete="off">
+      <div class="form-group">
+        <textarea rows="10" formControlName="text" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted1 && f1.text.errors }">{{selObj?.text}}</textarea>
+        <div *ngIf=" submitted1 && f1.text.errors" class="invalid-feedback">
+          <div *ngIf="f1.text.errors.required">Tweet body is required</div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="updateTweet(selObj?.tweetId)">Update</button>
+    <button type="button" class="btn btn-default" (click)="modalRef.hide()">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #tweetReply>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Reply Tweet</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form2" autocomplete="off">
+
+      <div class="form-group">
+        <textarea rows="10" formControlName="text" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted2 && f2.text.errors }"></textarea>
+        <div *ngIf=" submitted2 && f2.text.errors" class="invalid-feedback">
+          <div *ngIf="f2.text.errors.required">Tweet body is required</div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="addTweetReply(selObj?.tweetId)">Save</button>
+    <button type="button" class="btn btn-default" (click)="closeModalRefForReply()">Close</button>
+  </div>
+</ng-template>

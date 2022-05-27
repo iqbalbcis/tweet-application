@@ -1,0 +1,19 @@
+<div class="mt-5 card container border rounded p-s5 divwidth">
+  <h5 class="text-center mb-4">Please, enter username</h5>
+  <div class="alert alert-warning" *ngIf="invalidInput">{{message}}</div>
+  <form [formGroup]="form" (ngSubmit)="findAUserUsingUsername()" autocomplete="off">
+
+    <div class="form-group">
+      <input type="text" formControlName="username" placeholder="User Name" class="form-control"
+        [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+      <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+        <div *ngIf="f.username.errors.required">Username is required</div>
+      </div>
+    </div>
+
+    <div></div>
+    <input type="submit" value="Submit" class="btn btn-info btn-block btn-lg">
+    <p></p>
+  </form>
+</div>
+

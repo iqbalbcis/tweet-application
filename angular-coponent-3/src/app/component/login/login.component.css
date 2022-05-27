@@ -1,0 +1,19 @@
+.divwidth
+{
+  max-width: 400px;
+  margin: auto;
+}
+
+/* .centered {
+    position: fixed;
+    top: 30%;
+    left: 40%;
+    margin-top: -100px;
+    margin-left: -100px;
+} */
+
+/* @media only screen and (max-width:450px) {
+  .centered {
+    left: 25%;
+  }
+} */

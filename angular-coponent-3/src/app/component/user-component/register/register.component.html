@@ -1,0 +1,65 @@
+<div class="mt-1 card" style="width: 50%; margin: auto">
+  <h4 class="card-header">User Registration Form</h4>
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="registerUser()" autocomplete="off">
+      <div class="form-group">
+        <label for="username">User Name</label>
+        <input type="text" formControlName="username" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+        <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+          <div *ngIf="f.username.errors.required">User name is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="passWord">Password</label>
+        <input type="password" formControlName="passWord" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.passWord.errors }" />
+        <div *ngIf="submitted && f.passWord.errors" class="invalid-feedback">
+          <div *ngIf="f.passWord.errors.required">Password is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" formControlName="confirmPassword" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" />
+        <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
+          <div *ngIf="f.confirmPassword.errors.required">Confirm password is required</div>
+          <div *ngIf="f.confirmPassword.errors.confirmedValidator">Password and Confirm Password must be match</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="roles">User Role</label>
+        <select formControlName="roles" class="form-control">
+          <option [ngValue]="null" disabled>Select Role</option>
+          <option *ngFor="let role of roleList" [ngValue]="role">
+            {{ role }}
+          </option>
+        </select>
+        <div *ngIf="submitted && f.roles.errors" class="error">
+          <div *ngIf="f.roles.errors.required">
+            Please, select a role form the box
+          </div>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="text" formControlName="email" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+          <div *ngIf="f.email.errors.required">Emai is required</div>
+          <div *ngIf="f.email.errors.pattern">Invalid email</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn-primary">Register</button>
+      </div>
+    </form>
+  </div>
+</div>
+
