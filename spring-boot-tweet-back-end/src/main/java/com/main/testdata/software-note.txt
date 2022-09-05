@@ -1,0 +1,10 @@
+1. Every file needs to be created after login with his/her own credential
+
+2. Every system user needs to update his own email.
+    So, when a file will be activated by admin,
+    an automatic email will be sent to the file owner with his file reference number,
+    and the folder name
+
+3. email update to get activation code
+
+4. to send email for invoice which email needs to be used // postmaster@huberslaw.co.uk (currently using)

@@ -1,0 +1,22 @@
+
+// http://localhost:8080/lawfirm/saveUser
+{
+  "createdBy": "Raza",
+  "modifiedBy": "Raza",
+  "firstNames": "Raza",
+  "lastName": "Iqbal",
+  "email": "iqbalbcis@gmail.com",
+  "password": "123",
+  "mobileNumber": "07513422810";
+  "roles": "ADMIN"
+}
+
+// http://localhost:8080/lawfirm/updateUser
+{
+  "firstNames": "Raza",
+  "lastName": "Iqbal",
+  "modifiedBy": "Iqbal",
+  "email": "iqbalbcis@gmail.com",
+  "mobileNumber": "07513422810";
+  "roles": "ADMIN"
+}

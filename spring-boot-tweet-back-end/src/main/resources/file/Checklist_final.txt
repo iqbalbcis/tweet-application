@@ -1,0 +1,8 @@
+1) Java
+2) JDBC
+3) Spring Boot, MS, Http and REST
+4) Maven
+5) Sql 
+6) Face to face interview  (design pattern, test)
+7) Angular
+8) Practical

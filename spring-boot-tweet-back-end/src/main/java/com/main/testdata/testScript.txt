@@ -1,0 +1,52 @@
+Post Payload
+=========================================
+http://localhost:8080/api/employee/saveEmployee
+in postman from AUth tab -> Bearer Token -> put only token in the box (no Bearer again no need to add
+ anything in header but in swagger need to add Bearer token)
+
+{
+  "firstNames": "Raza",
+  "lastName": "Iqbal",
+  "passWord": "abc123",
+  "address": "address",
+  "mobileNumber": "07515733910",
+  "email": "iqbalbcis@gmail.com",
+  "salary": 10.23
+}
+//================================================
+http://localhost:8080/api/employee/saveUser
+// need to disable security in config. have a look in config file.
+{
+  "email": "iqbalbcis@gmail.com",
+  "firstNames": "Raza",
+  "lastName": "Iqbal",
+  "mobileNumber": "07515733910",
+  "password": "abc123",
+  "roles": "ADMIN"
+}
+// http://localhost:8080/api/employee/createBookOneToOne
+{
+  "bookName": "php",
+  "author": {
+    "authorId": 8,
+    "authorName": "string"
+  }
+}
+==================================
+for Integration test
+> need to pass test properties in VM Option then run Test Class / alternate provided in test class
+===================================
+how to add local properties in run time
+-> from modify option -> select add VM Option
+-> put in vm option: -Dspring.profiles.active=redis
+
+how to run one application in multiple port
+git cli> mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8080"
+cli> mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8090"
+
+git cli> mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=redis" (work)
+git cli> mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=redis --server.port=8090"
+
+=============================================================
+
+

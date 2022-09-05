@@ -1,0 +1,242 @@
+Derived Query Methods in Spring Data JPA
+=============================================
+https://attacomsian.com/blog/derived-query-methods-spring-data-jpa
+
+TABLE OF CONTENTS ⛱
+Spring Data JPA allows you to execute different kinds of queries to retrieve data from the database. You can either use the method name to derive a query directly or manually define your own JPQL/native query using the @Query annotation.
+
+For simple use-cases, you can easily write a derive query method by simply looking at the corresponding method name in the entity class. Just define the query methods in a repository interface that extends one of the Spring Data's repositories such as CrudRepository. Spring Data JPA will create queries automatically by parsing these method names.
+
+In this article, you'll learn how Spring Data JPA leverages the idea of method naming conventions for mapping JPA queries.
+
+Derived Query Methods Structure
+A derived query method name has two main components separated by the first By keyword:
+
+The introducer clause like find, read, query, count, or get which tells Spring Data JPA what you want to do with the method. This clause can contain further expressions, such as Distinct to set a distinct flag on the query to be created.
+The criteria clause that starts after the first By keyword. The first By acts as a delimiter to indicate the start of the actual query criteria. The criteria clause is where you define conditions on entity properties and concatenate them with And and Or keywords.
+Here are some examples:
+
+# find users by last name
+List<User> findByLastName(String lastName);
+
+# find distinct users by email
+List<User> findDistinctByEmail(String email);
+
+# count users by profession
+int countByProfession(String profession);
+Note: You can also use readBy, getBy, and queryBy in place of findBy and Spring Data JPA would behave the same. For example, readByName(String name) is equivalent to findByName(String name).
+
+Create an Application
+Let us first create a sample Spring Boot application with Spring Data JPA and H2 database. If you prefer to use MySQL for the data store, follow this step-by-step tutorial.
+
+The sample application has just one User entity. Here is how it looks like:
+
+User.java
+
+package com.attacomsian.jpa.derived.domains;
+
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String name;
+    @Column(unique = true)
+    private String email;
+    private int age;
+    private Date birthDate;
+    private boolean active;
+
+    public User() {
+    }
+
+    public User(String name, String email, int age, Date birthDate, boolean active) {
+        this.name = name;
+        this.email = email;
+        this.age = age;
+        this.birthDate = birthDate;
+        this.active = active;
+    }
+
+    // getters and setters, equals(), toString(), ... (omitted for brevity)
+}
+Next, create the UserRepository interface which extends CrudRepository. We will use this repository interface for defining all our derived query methods. Here is how it looks like:
+
+UserRepository.java
+
+package com.attacomsian.jpa.derived.repositories;
+
+import com.attacomsian.jpa.derived.domains.User;
+import org.springframework.data.repository.CrudRepository;
+
+public interface UserRepository extends CrudRepository<User, Long> {
+
+    // TODO: add derived methods
+}
+Simple Derived Queries
+Let us start with a simple example of a derived query that fetches User entities with a given name:
+
+List<User> findByName(String name);
+The above-derived query is pretty simple and self-explaining. The name of the method begins with the findBy keyword and then used the entity attribute name to specify the criteria. This method takes only one parameter that will be used to match the referenced entity attribute in the WHERE clause. The findByName() method returns a list of User entities as multiple users can have the same name.
+
+Now if you run the application, the above-derived method will be translated to the following JPQL query:
+
+SELECT u from User u WHERE u.name = ?1
+Similarly, we can create simple queries for other User's entity attributes. The following query method returns a User instance matched with an email address:
+
+Optional<User> findByEmail(String email);
+Derived Queries with Multiple Parameters
+You can easily combine multiple condition expressions by using And and Or keywords. Let us combine the above two query methods to search for User entities with a given name or an email address:
+
+List<User> findByNameOrEmail(String name, String email);
+Another example of a derived query with multiple parameters that looks for User entities with a given name and age:
+
+List<User> findByNameAndAge(String name, int age);
+You can concatenate as much expressions as you want with And and Or keywords:
+
+List<User> findByActiveAndBirthDateOrNameAndAge(boolean active,Date dob, String name, int age);
+Spring Data JPA does not explicitly limit the number of expressions you can combine in a single derived query. However, you shouldn't go insane. Too long derived queries are hard to read and maintain. For complex use cases, you should rather use custom queries.
+
+Equality Condition Keywords
+For all derived queries we have written above, Spring Data JPA will generate a simple equals comparison. You can also specify other comparison operators by using equality keywords.
+
+For an exact match, we only need to reference the entity attribute as we did above:
+
+List<User> findByName(String name);
+For more readability, you can add either Is or Equals:
+
+List<User> findByNameIs(String name);
+// OR
+List<User> findByNameEquals(String name);
+To express the inequality, you can use the IsNot keyword:
+
+List<User> findByNameIsNot(String name);
+// OR
+List<User> findByNameNot(String name);
+For the null value comparison, we cannot directly use the equal (=) operator. If you pass a null parameter value, Spring Data JPA won't through an exception. Instead, it will translate the query to an IS NULL SQL comparison.
+
+To explicitly add the IS NULL or IS NOT NULL criteria to the query, you can use IsNull and IsNotNull respectively:
+
+List<User> findByEmailIsNull();
+List<User> findByEmailIsNotNull();
+For boolean entity attributes, you can even go one step further and directly add True and False keywords for the equality conditions:
+
+List<User> findByActiveTrue();
+List<User> findByActiveFalse();
+Matching Condition Keywords
+To check if the value of an entity attribute contains the given substring, we can use the matching condition keywords.
+
+For example, we can find users whose names start with a specific value by using the StartingWith keyword:
+
+List<User> findByNameStartingWith(String prefix);
+// OR
+List<User> findByNameIsStartingWith(String prefix);
+// OR
+List<User> findByNameStartsWith(String prefix);
+Spring Data JPA will translate this to WHERE name LIKE 'prefix%' query.
+
+For users whose names end with a specific value, you should use endingWith keyword that translates to WHERE name LIKE '%suffix':
+
+List<User> findByNameEndingWith(String suffix);
+Similarly, for users whose names contain a specific value, there exists a Containing keyword which is equivalent to WHERE name LIKE '%infix%':
+
+List<User> findByNameContaining(String infix);
+All the above three condition keywords automatically append the % operator to the parameter value. It is good enough for simple use cases.
+
+For complex matching operation which includes several % operators, you should use the Like keyword instead:
+
+List<User> findByEmailLike(String pattern);
+The Like (or NotLike) keyword does not append the % operator to the argument. You have to explicitly define the matching pattern like below:
+
+String pattern = "%atta%@gmail%";
+List<User> users = userRepository.findByEmailLike(pattern);
+Comparison Condition Keywords
+Spring Data JPA also provides keywords for comparison operations. For example, we can use LessThan and LessThanEqual keywords to compare the value of a specific property with the given value:
+
+List<User> findByAgeLessThan(int age);
+List<User> findByAgeLessThanEqual(int age);
+For > and >= comparison operations, you should use GreaterThan and GreaterThanEqual keywords:
+
+List<User> findByAgeGreaterThan(int age);
+List<User> findByAgeGreaterThanEqual(int age);
+To check if the value of an entity attribute is between two given values, Spring Data JPA provides Between keyword:
+
+List<User> findByAgeBetween(int start, int end);
+Two more interesting keywords, supported by the Spring Data JPA, are Before and After. We can use these keywords to find users who were born before or after a given date:
+
+List<User> findByBirthDateBefore(Date before);
+List<User> findByBirthDateAfter(Date after);
+Distinct and IgnoreCase Keywords
+The Distinct keyword is used to enables the distinct flag for the query:
+
+List<User> findDistinctByEmail(String email);
+
+List<User> findDistinctPeopleByNameOrEmail(String name, String email);
+The IgnoreCase keyword is used to enable case-insensitive search for a specific property:
+
+List<User> findByNameIgnoreCase(String name);
+To enable case-insensitive search for all suitable properties, you should use the AllIgnoreCase keyword:
+
+List<User> findByNameOrEmailAllIgnoreCase(String name, String email);
+Sorting Derived Query Results
+Spring Data JPA also allows us to enable static ordering by appending an OrderBy clause to the query method that references a property and by providing a sorting direction (Asc or Desc).
+
+The following example uses static ordering to retrieve all User entities whose name contains a given value in the ascending order:
+
+List<User> findByNameContainingOrderByName(String name);
+// OR
+List<User> findByNameContainingOrderByNameAsc(String name);
+By default, the OrderBy clause sorts the results in the ascending order. But you can add Desc to reverse the sorting direction:
+
+List<User> findByNameContainingOrderByNameDesc(String name);
+If you need dynamic ordering, you can add a Sort parameter to your query method. This is one of the special parameters supported by Spring Data JPA. Sort triggers the generation of an ORDER BY clause. Here is an example:
+
+List<User> findByNameContaining(String name, Sort sort);
+To call the above method, you need to create a Sort object to specify the entity attributes and their ordering:
+
+// sort users in ascending order
+List<User> users = userRepository.findByNameContaining("john", Sort.by("name").descending());
+
+// sort users in descending order
+List<User> users = userRepository.findByNameContaining("john", Sort.by("name").descending());
+
+// multiple sort parameters
+List<User> users = userRepository.findByNameContaining("john", Sort.by("name", "age").descending());
+Limiting Derived Query Results
+The results of derived query methods can be limited by using the First or Top keywords interchangeably. An optional numeric value can be added to Top or First to specify the maximum number of results to be returned. If the number is not provided, a result size of 1 is used.
+
+The following examples show how to limit the derived query result size:
+
+User findFirstByOrderByName();
+
+User findTopByOrderByAgeDesc();
+
+List<User> findFirst5ByEmail(String email);
+
+List<User> findDistinctTop3ByAgeLessThan(int age);
+Paginate Derived Query Results
+Spring Data JPA provides another special parameter Pageable to apply pagination to query results. You just need to add this special parameter to your query method definition and change the return type to Page<User>:
+
+Page<User> findByActive(boolean active, Pageable pageable);
+The Pageable interface makes it very easy to dynamically add paging to your statically defined query. A Page knows about the total number of elements and pages available.
+
+You just define the page number you want to retrieve and how many records should be on a page. That’s it. Spring Data JPA will automatically create an appropriate paging query:
+
+Pageable pageable = PageRequest.of(0, 10);
+Page<User> userPage = userRepository.findByActive(true, pageable)
+You can even add dynamic sorting to derived query through the Pageable instance:
+
+Pageable pageable = PageRequest.of(0, 10, Sort.by("name").descending());
+Page<User> userPage = userRepository.findByActive(true, pageable);
+Derived Delete Queries
+Spring Data JPA also supports derived delete queries:
+
+// delete all users by name
+void deleteByName(String name);
+
+// delete all active or inactive users
+void deleteAllByActive(boolean active);

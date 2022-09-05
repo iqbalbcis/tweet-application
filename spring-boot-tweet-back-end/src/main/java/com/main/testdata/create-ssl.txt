@@ -1,0 +1,13 @@
+
+1) download private key when genrate certificate (extension = .key)
+2) download ssl certificate (ext = .pem or .crt or .cer)
+3) download .pfx file from website
+
+// if not work
+=====================
+install Git -> set path in env variable (C:\Program Files\Git\usr\bin)
+
+now go the certificate file -> in the bar type cmd(after set path always open new cmd,
+	otherwise, will not get new path) -> type openssl then enter
+OpenSSL> pkcs12 -export -out _.inclusiveit4u.co.uk_private_key.pfx -inkey _.inclusiveit4u.co.uk_private_key.key -in inclusiveit4u.co.uk_ssl_certificate.cer -certpbe PBE-SHA1-3DES -keypbe PBE-SHA1-3DES -macalg sha1
+>now it ask password
