@@ -13,57 +13,57 @@ export class TweetService {
   addTweetDetails(tweet: object): Observable<any>
   {
     return this.http.post(
-      `${API_URL}/api/v1.0/tweets/add`
+      `${API_URL}/tweets/add-tweet`
         , tweet);
   }
 
   deleteTweetDetails(tweetId: number): Observable<any>
   {
     return this.http.delete(
-      `${API_URL}/api/v1.0/tweets/delete/${tweetId}`);
+      `${API_URL}/tweets/delete/${tweetId}`);
   }
 
   findAllTweets(username:string): Observable<any>
   {
     return this.http.get(
-      `${API_URL}/api/v1.0/tweets/${username}`);
+      `${API_URL}/tweets/${username}`);
   }
 
   findAllTweetAndReply(username:string): Observable<any>
   {
     return this.http.get(
-      `${API_URL}/api/v1.0/tweets/reply/like/${username}`);
+      `${API_URL}/tweets/reply/like/${username}`);
   }
 
   addReplyDetails(username:string, tweetId: number, reply: object): Observable<any>
   {
     return this.http.post(
-      `${API_URL}/api/v1.0/tweets/${username}/reply/${tweetId}`
+      `${API_URL}/tweets/${username}/reply/${tweetId}`
         , reply);
   }
 
   updateTweetDetails(tweetId: number, tweet: object): Observable<any>
   {
     return this.http.put(
-      `${API_URL}/api/v1.0/tweets/update/${tweetId}`
+      `${API_URL}/tweets/update/${tweetId}`
         , tweet);
   }
 
   updateTweetLike(username:string, tweetId: number, tweetLike: object): Observable<any>
   {
     return this.http.put(
-      `${API_URL}/api/v1.0/tweets/${username}/like/${tweetId}`
+      `${API_URL}/tweets/${username}/like/${tweetId}`
         , tweetLike);
   }
 
   totalLikeCount(tweetId: number): Observable<any> {
     return this.http.get(
-      `${API_URL}/api/v1.0/tweets/countTotalLike/${tweetId}`);
+      `${API_URL}/tweets/countTotalLike/${tweetId}`);
   }
 
   sendMessage(message:string): Observable<any>
   {
     return this.http.post(
-      `${API_URL}/api/v1.0/tweets/send/${message}`, null);
+      `${API_URL}/tweets/send/${message}`, null);
   }
 }

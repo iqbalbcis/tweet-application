@@ -16,13 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.ws.rs.Produces;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/tweets")
@@ -73,179 +73,86 @@ public class TweetController {
         return ResponseEntity.status(HttpStatus.CREATED).body(tweet);
     }
 
-//    @ApiOperation(value = "Update tweet", nickname = "updateTweetDetails", notes = "Update existing tweet",
-//            tags = {"Tweet"}, response = ControllerResponse.class,
-//            authorizations = { @Authorization(value="jwtToken") }) // value="jwtToken" picked from swagger config
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 201, message = "Data is successfully inserted"),
-//            @ApiResponse(code = 400, message = "Bad request"),
-//            @ApiResponse(code = 500, message = "Exception occurs while serving the request")})
-//    @PutMapping(value = "/update/{tweeId}", produces = {"application/json"}, consumes = {"application/json"})
-//    public ResponseEntity<ControllerResponse> updateTweetDetails(
-//            @ApiParam(value = "Tweet Id", required = true) @PathVariable(value = "tweeId") Long tweeId,
-//            @ApiParam(value = "Tweet Object", required = true) @Valid @RequestBody Tweet tweetDetails) {
-//
-//        ControllerResponse response = new ControllerResponse();
-//        HttpStatus httpStatus = null;
-//        try {
-//            LOG.info("Calling service to update tweet text");
-//
-//            Tweet existTweet = tweetService.findTweeByTweetId(tweeId);
-//            if(existTweet == null)
-//            {
-//                response.setMessage(Constants.NOTEXIST_MESSAGE);
-//                httpStatus = HttpStatus.NOT_FOUND;
-//                return new ResponseEntity<>(response, httpStatus);
-//            }
-//
-//            existTweet.setText(tweetDetails.getText());
-//            Tweet tweet = tweetService.postTweet(existTweet);
-//
-//            response.setMessage(Constants.UPPDATE_MESSAGE);
-//            response.setTweet(tweet);
-//            httpStatus = HttpStatus.OK;
-//
-//        } catch (Exception e) {
-//            LOG.error(e.getMessage(), e);
-//            response.setMessage(Constants.EXCEPTION_MESSAGE);
-//            response.setDescription(e.getMessage());
-//            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-//        }
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
-//
-//    @ApiOperation(value = "Delete tweet", nickname = "deleteTweetDetails", notes = "Delete tweet",
-//            tags = {"Tweet"}, response = ControllerResponse.class,
-//            authorizations = { @Authorization(value="jwtToken") }) // value="jwtToken" picked from swagger config
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "Operation Successful"),
-//            @ApiResponse(code = 400, message = "Bad request"),
-//            @ApiResponse(code = 404, message = "Data not exist"),
-//            @ApiResponse(code = 500, message = "Exception occurs while retrieving the request") })
-//    @DeleteMapping(value = "/delete/{tweetId}")
-//    public ResponseEntity<ControllerResponse> deleteTweetDetails(
-//            @ApiParam(value = "Tweet Id", required = true) @PathVariable(value = "tweetId") Long tweetId) {
-//
-//        ControllerResponse response = new ControllerResponse();
-//        HttpStatus httpStatus = null;
-//        try {
-//            LOG.info("Calling service to delete tweet");
-//
-//            tweetService.deleteTweet(tweetId);
-//            replyService.deleteAllReplyForAPost(tweetId);
-//            tweetLikeService.deleteAllLikeForAPost(tweetId);
-//
-//            response.setMessage(Constants.DELETE_MESSAGE);
-//            httpStatus = HttpStatus.OK;
-//
-//        } catch (Exception e) {
-//            LOG.error(e.getMessage(), e);
-//            response.setMessage(Constants.EXCEPTION_MESSAGE);
-//            response.setDescription(e.getMessage());
-//            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-//        }
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
-//
-//    @ApiOperation(value = "Find all tweet for a user", nickname = "findAllTweetsForAUser", notes = "Find all tweet for a user",
-//            tags = { "Tweet" }, response = ControllerResponse.class,
-//            authorizations = { @Authorization(value="jwtToken") }) // value="jwtToken" picked from swagger config
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "Operation Successful"),
-//            @ApiResponse(code = 400, message = "Bad request"),
-//            @ApiResponse(code = 404, message = "Data not found"),
-//            @ApiResponse(code = 500, message = "Exception occurs while retrieving the request") })
-//    @Produces({"application/json"})
-//    @GetMapping(value = "/{username}")
-//    public ResponseEntity<ControllerResponse> findAllTweetsForAUser(
-//            @ApiParam(value = "User Name", required = true) @PathVariable(value = "username") String username)
-//    {
-//        ControllerResponse response = new ControllerResponse();
-//        HttpStatus httpStatus = null;
-//        try
-//        {
-//            LOG.info("Calling service for find all tweets for a specific user");
-//
-//            List<Tweet> tweetList = tweetService.findSpecificUserTweets(username);
-//
-//            List<Tweet> tweetListWithCount = new ArrayList<>();
-//            if(!tweetList.isEmpty())
-//            {
-//                for(Tweet tweet:tweetList) {
-//                    tweet.setTotalLikeCount(tweetLikeService.countTotalLike(tweet.getTweetId()));
-//                    tweetListWithCount.add(tweet);
-//                }
-//            }
-//
-//            response.setTweetList(tweetListWithCount);
-//            httpStatus =HttpStatus.OK;
-//        }
-//        catch(Exception e)
-//        {
-//            LOG.error(e.getMessage(), e);
-//            response.setMessage(Constants.EXCEPTION_MESSAGE);
-//            response.setDescription(e.getMessage());
-//            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-//        }
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
-//
-//    @ApiOperation(value = "Find all for a user", nickname = "findAllTweetsAndReplyAndTotalLike", notes = "Find all for a user",
-//            tags = { "Tweet" }, response = ControllerResponse.class,
-//            authorizations = { @Authorization(value="jwtToken") }) // value="jwtToken" picked from swagger config
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "Operation Successful"),
-//            @ApiResponse(code = 400, message = "Bad request"),
-//            @ApiResponse(code = 404, message = "Data not found"),
-//            @ApiResponse(code = 500, message = "Exception occurs while retrieving the request") })
-//    @Produces({"application/json"})
-//    @GetMapping(value = "/reply/like/{username}")
-//    public ResponseEntity<ControllerResponse> findAllTweetsAndReplyAndTotalLike(
-//            @ApiParam(value = "User Name", required = true) @PathVariable(value = "username") String username)
-//    {
-//        ControllerResponse response = new ControllerResponse();
-//        HttpStatus httpStatus = null;
-//        try
-//        {
-//            LOG.info("Calling service for find all tweets for a specific user");
-//
-//            List<Tweet> tweetList = tweetService.findSpecificUserTweets(username);
-//
-//            List<Tweet> tweetListWithCount = new ArrayList<>();
-//            if(!tweetList.isEmpty())
-//            {
-//                for(Tweet tweet:tweetList) {
-//                    tweet.setTotalLikeCount(tweetLikeService.countTotalLike(tweet.getTweetId()));
-//                    tweet.setReplyList(replyService.getAllReplyForSpecificTweet(tweet.getTweetId()));
-//                    tweetListWithCount.add(tweet);
-//                }
-//            }
-//
-//            response.setTweetList(tweetListWithCount);
-//            httpStatus =HttpStatus.OK;
-//        }
-//        catch(Exception e)
-//        {
-//            LOG.error(e.getMessage(), e);
-//            response.setMessage(Constants.EXCEPTION_MESSAGE);
-//            response.setDescription(e.getMessage());
-//            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-//        }
-//        return new ResponseEntity<>(response, httpStatus);
-//    }
-//
-//    @ApiOperation(value = "generate error", nickname = "generateError", notes = "generate error",
-//            tags = { "Tweet" }, authorizations = { @Authorization(value="jwtToken") })
-//    @GetMapping(value = "/generateError")
-//    public ResponseEntity<?> generateError() {
-//        try
-//        {
-//            throw new RuntimeException("generated error");
-//        }
-//        catch(Exception e)
-//        {
-//            LOG.error(e.getMessage(), e);
-//        }
-//        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+    @Operation(summary = "This operation is used to update TweetDetails")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Data is successfully updated"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Exception occurred while serving the request")})
+    @PutMapping(value = "/update/{tweeId}", produces = {"application/json"}, consumes = {"application/json"})
+    public ResponseEntity<Tweet> updateTweetDetails(
+            @Parameter(description = "Tweet Id", required = true) @PathVariable(value = "tweeId") Long tweeId,
+            @Parameter(description = "Tweet Object", required = true) @Valid @RequestBody Tweet tweetDetails) {
+
+        log.info("Calling service to update tweet text");
+        Tweet existTweet = tweetService.findTweeByTweetId(tweeId);
+        existTweet.setText(tweetDetails.getText());
+        Tweet tweet = tweetService.postTweet(existTweet);
+
+        return ResponseEntity.status(HttpStatus.OK).body(tweet);
+    }
+
+    @Operation(summary = "delete tweet")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operation Successful"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "Data not found"),
+            @ApiResponse(responseCode = "500", description = "Exception occurs while retrieving the request")})
+    @DeleteMapping(value = "/delete/{tweetId}")
+    public ResponseEntity<?> deleteTweetDetails(
+            @Parameter(description = "Tweet Id", required = true) @PathVariable(value = "tweetId") Long tweetId) {
+
+        log.info("Calling service to delete tweet");
+        tweetService.deleteTweet(tweetId);
+        replyService.deleteAllReplyForAPost(tweetId);
+        tweetLikeService.deleteAllLikeForAPost(tweetId);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Operation(summary = "This operation is used to find all tweet for a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operation Successful"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "Data not found"),
+            @ApiResponse(responseCode = "500", description = "Exception occurred while serving the request")})
+    @GetMapping(value = "/{username}", produces = {"application/json"})
+    public ResponseEntity<List<Tweet>> findAllTweetsForAUser(
+            @Parameter(description = "User Name", required = true) @PathVariable(value = "username") String username) {
+        log.info("Calling service for find all tweets for a specific user");
+
+        List<Tweet> tweetList = tweetService.findSpecificUserTweets(username);
+
+        List<Tweet> tweetListWithCount = new ArrayList<>();
+        if (!tweetList.isEmpty()) {
+            for (Tweet tweet : tweetList) {
+                tweet.setTotalLikeCount(tweetLikeService.countTotalLike(tweet.getTweetId()));
+                tweetListWithCount.add(tweet);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(tweetListWithCount);
+    }
+
+    @Operation(summary = "This operation is used to find all Tweets Reply And Like for a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Find all Tweets Reply And Like"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Exception occurred while serving the request")})
+    @Produces({"application/json"})
+    @GetMapping(value = "/reply/like/{username}")
+    public ResponseEntity<List<Tweet>> findAllTweetsAndReplyAndTotalLike(
+            @Parameter(description = "User Name", required = true) @PathVariable(value = "username") String username) {
+        log.info("Calling service for find all tweets for a specific user");
+
+        List<Tweet> tweetList = tweetService.findSpecificUserTweets(username);
+
+        List<Tweet> tweetListWithCount = new ArrayList<>();
+        if (!tweetList.isEmpty()) {
+            for (Tweet tweet : tweetList) {
+                tweet.setTotalLikeCount(tweetLikeService.countTotalLike(tweet.getTweetId()));
+                tweet.setReplyList(replyService.getAllReplyForSpecificTweet(tweet.getTweetId()));
+                tweetListWithCount.add(tweet);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(tweetListWithCount);
+    }
 }

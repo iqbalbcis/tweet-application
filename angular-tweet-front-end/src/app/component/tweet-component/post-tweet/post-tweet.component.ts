@@ -146,8 +146,8 @@ export class PostTweetComponent implements OnInit {
 
     this.tweetService.findAllTweetAndReply(this.getUserName()).subscribe(
       data => {
-        console.log(data.tweetList);
-        this.postListArr = data.tweetList;
+        console.log(data);
+        this.postListArr = data;
       },
       error => {
         console.log(error);
@@ -196,8 +196,8 @@ export class PostTweetComponent implements OnInit {
     this.tweetService.totalLikeCount(tweetId).subscribe(
       data => {
         console.log(data);
-        if (data.count > 0) {
-          this.totalCount = '' + data.count;
+        if (data> 0) {
+          this.totalCount = '' + data;
         }
       },
       error => {
