@@ -44,13 +44,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User updateUserPassword(User user) {
-        // user will retrieve then set password and save
-        return userRepository.save(user);
-    }
-
-    @Override
-    @Transactional
     public void deleteUser(User user) {
         userRepository.delete(user);
     }
