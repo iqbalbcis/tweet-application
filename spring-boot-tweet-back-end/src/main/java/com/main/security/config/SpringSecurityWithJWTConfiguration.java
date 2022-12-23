@@ -7,13 +7,11 @@ import com.main.security.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -27,8 +25,6 @@ import static com.main.constants.CommonConstant.*;
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityWithJWTConfiguration {
-
-    // https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
 
     private MyUserDetailsService myUserDetailsService;
     private JwtRequestFilter jwtRequestFilter;
@@ -58,10 +54,9 @@ public class SpringSecurityWithJWTConfiguration {
                 .exceptionHandling().authenticationEntryPoint(entryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers(AUTHENTICATIONPATH).permitAll() // need to the path in constant class
-                .antMatchers(ACTUATOR).permitAll()
-                .antMatchers(H2CONSOLE).permitAll()
-                .antMatchers("/tweets/register").permitAll()
+                .requestMatchers(AUTHENTICATIONPATH).permitAll() // need to the path in constant class
+                .requestMatchers(ACTUATOR, H2CONSOLE).permitAll()
+                .requestMatchers("/tweets/register").permitAll()
                 .anyRequest().authenticated();
 
         // http.headers().frameOptions().disable();
@@ -78,10 +73,10 @@ public class SpringSecurityWithJWTConfiguration {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .antMatchers(HttpMethod.OPTIONS, "/**")
-                .antMatchers("/openapi/v3/api-docs",
+                .requestMatchers(HttpMethod.OPTIONS, "/**")
+                .requestMatchers("/v3/api-docs",
                         "/configuration/ui",
-                        "/openapi/v3/api-docs/swagger-config",
+                        "/v3/api-docs/swagger-config",
                         "/swagger-resources/**",
                         "/configuration/security",
                         "/swagger-ui/index.html",
