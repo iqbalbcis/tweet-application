@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/tweet_application?autoReconnect=true&useUnicode=yes&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
-    password: Matlab009cxnakhi123
+    password: password
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
